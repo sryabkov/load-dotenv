@@ -54,9 +54,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Show Environment Variables Before
+        shell: bash
         run: |
-          env | sort | grep VALUE
-          env | sort | grep SECRET
+          echo Nothing should be displayed here
+          env | sort | grep VALUE || true
+          env | sort | grep SECRET || true
 
       - name: Test Local Action (Values, Not Masked)
         id: test-action-values
@@ -72,6 +74,7 @@ jobs:
           maskValues: true
 
       - name: Show Environment Variables After
+        shell: bash
         env:
           VALUE_10: ${{ env.VALUE_10 }}
           VALUE_11: ${{ env.VALUE_11 }}
