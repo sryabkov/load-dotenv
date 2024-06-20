@@ -12,6 +12,14 @@ export async function exportVariables(
 ): Promise<void> {
   return new Promise(resolve => {
     try {
+      for (const [key, value] of Object.entries(entries)) {
+        core.info(`key=${key} | value=${value}`)
+        if (maskValues) {
+          core.setSecret(value)
+        }
+        core.info(`key=${key} | value=${value}`)
+        core.exportVariable(key, value)
+      }
       core.info(JSON.stringify(entries))
       core.info(String(maskValues))
       resolve()

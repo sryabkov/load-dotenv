@@ -59,6 +59,16 @@ jobs:
         with:
           dotEnvFilePath: ./__tests__/fixtures/test_values.env
 
-      # - name: Print Output
-      #   id: output
-      #   run: echo "${{ steps.test-action.outputs.time }}"
+      - name: Show Environment Variables
+        env:
+          PASSWORD_10: ${{ env.PASSWORD_10 }}
+          PASSWORD_11: ${{ env.PASSWORD_11 }}
+          PASSWORD_20: ${{ env.PASSWORD_20 }}
+          PASSWORD_21: ${{ env.PASSWORD_21 }}
+        run: |
+          env | sort
+          echo "---"
+          echo $PASSWORD_10 | sed 's/./& /g'
+          echo $PASSWORD_11 | sed 's/./& /g'
+          echo $PASSWORD_20 | sed 's/./& /g'
+          echo $PASSWORD_21 | sed 's/./& /g'
