@@ -1834,6 +1834,15 @@ function isLoopbackAddress(host) {
 
 /***/ }),
 
+/***/ 6884:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var r=__nccwpck_require__(1017),e=__nccwpck_require__(7147),t=r.resolve(process.cwd(),".env");module.exports=function(r,n){void 0===n&&(n={emptyLines:!1});try{var i=e.readFileSync(r||t,{encoding:"UTF-8"}),o={},c=0,s=0;return i.split("\n").map(function(r){return n.comments&&r.startsWith("#")?["__COMMENT_"+(s+=1)+"__",r]:r?r.split("=").map(function(r){return r.trim()}):n.emptyLines?["__EMPTYLINE_"+(c+=1)+"__",""]:[""]}).filter(function(r){return r.length>1}).forEach(function(r){o[r[0]]=r[1]}),o}catch(r){throw new Error(r)}};
+//# sourceMappingURL=parse-dotenv.js.map
+
+
+/***/ }),
+
 /***/ 4294:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -24951,8 +24960,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-// import EnvObject from 'parse-dotenv'
-// import { getFileEntries } from './readFile'
+const readFile_1 = __nccwpck_require__(8261);
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -24962,11 +24970,10 @@ async function run() {
         const dotEnvFilePath = core.getInput('dotEnvFilePath');
         const maskValues = core.getBooleanInput('maskValues');
         // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-        core.debug(`Processing file ${dotEnvFilePath} ...`);
-        console.log(`dotEnvFilePath: ${dotEnvFilePath}`);
-        console.log(`maskValues: ${maskValues}`);
-        // const entries: <EnvObject> = getFileEntries(dotEnvFilePath)
-        // entries.forEach((entry: typeof EnvObject) => {
+        core.debug(`dotEnvFilePath: ${dotEnvFilePath}`);
+        core.debug(`maskValues: ${maskValues}`);
+        const entries = await (0, readFile_1.getFileEntries)(dotEnvFilePath);
+        core.info(entries);
         // Consider setting output for other workflow steps to use
         core.debug(`Finished processing file ${dotEnvFilePath} ...`);
     }
@@ -24977,6 +24984,40 @@ async function run() {
     }
 }
 exports.run = run;
+
+
+/***/ }),
+
+/***/ 8261:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getFileEntries = void 0;
+const parse_dotenv_1 = __importDefault(__nccwpck_require__(6884));
+/**
+ * Read .env file and parse into an array of key-value pairs.
+ * @param filePath The full name of the .env file
+ * @returns {Promise<any>} Resolves with the array of entries.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function getFileEntries(filePath) {
+    return new Promise(resolve => {
+        try {
+            const fileEntries = (0, parse_dotenv_1.default)(filePath);
+            resolve(fileEntries);
+        }
+        catch (error) {
+            if (error instanceof Error)
+                throw new Error(`Error parsing file ${filePath}: ${error.message}`);
+        }
+    });
+}
+exports.getFileEntries = getFileEntries;
 
 
 /***/ }),
