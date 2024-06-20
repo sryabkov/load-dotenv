@@ -24965,11 +24965,11 @@ const core = __importStar(__nccwpck_require__(2186));
  * @param entries The content of the .env file as an EnvObject
  * @returns {Promise<void>} Resolves with undefined.
  */
-async function exportVariables(entries, maskValues) {
+async function exportVariables(entries, mask) {
     return new Promise(resolve => {
         try {
             for (const [key, value] of Object.entries(entries)) {
-                if (maskValues) {
+                if (mask) {
                     core.setSecret(value);
                 }
                 core.exportVariable(key, value);
@@ -25026,13 +25026,13 @@ const exportVars_1 = __nccwpck_require__(8399);
  */
 async function run() {
     try {
-        const dotEnvFilePath = core.getInput('dotEnvFilePath');
-        const maskValues = core.getBooleanInput('maskValues');
+        const filePath = core.getInput('filePath');
+        const mask = core.getBooleanInput('mask');
         // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-        core.debug(`dotEnvFilePath: ${dotEnvFilePath}`);
-        core.debug(`maskValues: ${maskValues}`);
-        const entries = await (0, readFile_1.getFileEntries)(dotEnvFilePath);
-        (0, exportVars_1.exportVariables)(entries, maskValues);
+        core.debug(`filePath: ${filePath}`);
+        core.debug(`mask: ${mask}`);
+        const entries = await (0, readFile_1.getFileEntries)(filePath);
+        (0, exportVars_1.exportVariables)(entries, mask);
     }
     catch (error) {
         // Fail the workflow run if an error occurs
