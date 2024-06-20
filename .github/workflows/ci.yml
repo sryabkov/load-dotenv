@@ -92,15 +92,15 @@ jobs:
           env | sort | grep VALUE
           env | sort | grep SECRET
           echo "---"
-          echo $VALUE_10
-          echo $VALUE_11
-          echo $VALUE_12
-          echo $VALUE_20
-          echo $VALUE_21
-          echo $VALUE_22
-          echo $SECRET_10 | sed 's/./& /g'
-          echo $SECRET_11 | sed 's/./& /g'
-          echo $SECRET_12 | sed 's/./& /g'
-          echo $SECRET_20 | sed 's/./& /g'
-          echo $SECRET_21 | sed 's/./& /g'
-          echo $SECRET_22 | sed 's/./& /g'
+          echo "$VALUE_10"
+          echo "$VALUE_11"
+          echo "$VALUE_12"
+          echo "$VALUE_20"
+          echo "$VALUE_21"
+          echo "$VALUE_22"
+          echo "$SECRET_10" | sed 's/./& /g'
+          echo "$SECRET_11" | sed 's/./& /g'
+          echo "$SECRET_12" | sed 's/./& /g'
+          echo "$SECRET_20" | sed 's/./& /g'
+          echo "$SECRET_21" | sed 's/./& /g'
+          echo "$SECRET_22" | sed 's/./& /g'
