@@ -24973,7 +24973,7 @@ async function run() {
         core.debug(`dotEnvFilePath: ${dotEnvFilePath}`);
         core.debug(`maskValues: ${maskValues}`);
         const entries = await (0, readFile_1.getFileEntries)(dotEnvFilePath);
-        core.info(entries);
+        core.info(JSON.stringify(entries));
         // Consider setting output for other workflow steps to use
         core.debug(`Finished processing file ${dotEnvFilePath} ...`);
     }
@@ -25002,9 +25002,8 @@ const parse_dotenv_1 = __importDefault(__nccwpck_require__(6884));
 /**
  * Read .env file and parse into an array of key-value pairs.
  * @param filePath The full name of the .env file
- * @returns {Promise<any>} Resolves with the array of entries.
+ * @returns {Promise<EnvObject>} Resolves with the array of entries.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function getFileEntries(filePath) {
     return new Promise(resolve => {
         try {
