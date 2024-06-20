@@ -1,5 +1,7 @@
 name: 'load-dotenv'
-description: 'Load key value pairs from a .env file and set them as environment variables with optional masking'
+description:
+  'Load key value pairs from a .env file and set them as environment variables
+  with optional masking'
 author: 'Sergei Ryabkov'
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
@@ -9,7 +11,7 @@ branding:
 
 # Define your inputs here.
 inputs:
-  dotnetFilePath:
+  dotEnvFilePath:
     description: 'Full path to the .env file'
     required: true
   maskValues:

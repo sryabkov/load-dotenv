@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
-import { wait } from './wait'
+// import EnvObject from 'parse-dotenv'
+// import { getFileEntries } from './readFile'
 
 /**
  * The main function for the action.
@@ -7,18 +8,21 @@ import { wait } from './wait'
  */
 export async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
+    const dotEnvFilePath: string = core.getInput('dotEnvFilePath')
+    const maskValues: boolean = core.getBooleanInput('maskValues')
 
     // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Waiting ${ms} milliseconds ...`)
+    core.debug(`Processing file ${dotEnvFilePath} ...`)
 
-    // Log the current timestamp, wait, then log the new timestamp
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    // const entries: <EnvObject> = getFileEntries(dotEnvFilePath)
 
-    // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
+    // console.log(`dotEnvFilePathHello World')
+
+    // entries.forEach((entry: typeof EnvObject) => {
+
+    // Consider setting output for other workflow steps to use
+
+    core.debug(`Finished processing file ${dotEnvFilePath} ...`)
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
