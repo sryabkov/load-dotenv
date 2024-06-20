@@ -14,9 +14,10 @@ export async function run(): Promise<void> {
     // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
     core.debug(`Processing file ${dotEnvFilePath} ...`)
 
-    // const entries: <EnvObject> = getFileEntries(dotEnvFilePath)
+    console.log(`dotEnvFilePath: ${dotEnvFilePath}`)
+    console.log(`maskValues: ${maskValues}`)
 
-    // console.log(`dotEnvFilePathHello World')
+    // const entries: <EnvObject> = getFileEntries(dotEnvFilePath)
 
     // entries.forEach((entry: typeof EnvObject) => {
 
