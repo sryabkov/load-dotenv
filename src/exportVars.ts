@@ -18,8 +18,6 @@ export async function exportVariables(
         }
         core.exportVariable(key, value)
       }
-      core.info(JSON.stringify(entries))
-      core.info(String(maskValues))
       resolve()
     } catch (error) {
       if (error instanceof Error)

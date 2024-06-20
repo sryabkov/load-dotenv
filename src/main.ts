@@ -17,10 +17,7 @@ export async function run(): Promise<void> {
     core.debug(`maskValues: ${maskValues}`)
 
     const entries: EnvObject = await getFileEntries(dotEnvFilePath)
-
     exportVariables(entries, maskValues)
-
-    core.info(JSON.stringify(entries))
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
