@@ -64,14 +64,14 @@ jobs:
         id: test-action-values
         uses: ./
         with:
-          dotEnvFilePath: ./__tests__/fixtures/test_values.env
+          filePath: ./__tests__/fixtures/test_values.env
 
       - name: Test Local Action (Secrets, Masked)
         id: test-action-secrets
         uses: ./
         with:
-          dotEnvFilePath: ./__tests__/fixtures/test_secrets.env
-          maskValues: true
+          filePath: ./__tests__/fixtures/test_secrets.env
+          mask: true
 
       - name: Show Environment Variables After
         shell: bash

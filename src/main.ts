@@ -9,15 +9,15 @@ import { exportVariables } from './exportVars'
  */
 export async function run(): Promise<void> {
   try {
-    const dotEnvFilePath: string = core.getInput('dotEnvFilePath')
-    const maskValues: boolean = core.getBooleanInput('maskValues')
+    const filePath: string = core.getInput('filePath')
+    const mask: boolean = core.getBooleanInput('mask')
 
     // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`dotEnvFilePath: ${dotEnvFilePath}`)
-    core.debug(`maskValues: ${maskValues}`)
+    core.debug(`filePath: ${filePath}`)
+    core.debug(`mask: ${mask}`)
 
-    const entries: EnvObject = await getFileEntries(dotEnvFilePath)
-    exportVariables(entries, maskValues)
+    const entries: EnvObject = await getFileEntries(filePath)
+    exportVariables(entries, mask)
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)

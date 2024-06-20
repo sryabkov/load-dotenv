@@ -8,12 +8,12 @@ import { EnvObject } from './types'
  */
 export async function exportVariables(
   entries: EnvObject,
-  maskValues: boolean
+  mask: boolean
 ): Promise<void> {
   return new Promise(resolve => {
     try {
       for (const [key, value] of Object.entries(entries)) {
-        if (maskValues) {
+        if (mask) {
           core.setSecret(value)
         }
         core.exportVariable(key, value)

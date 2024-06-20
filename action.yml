@@ -11,10 +11,10 @@ branding:
 
 # Define your inputs here.
 inputs:
-  dotEnvFilePath:
+  filePath:
     description: 'Full path to the .env file'
     required: true
-  maskValues:
+  mask:
     description: 'Mask the values of environment variables'
     required: false
     default: 'false'
