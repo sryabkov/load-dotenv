@@ -53,22 +53,34 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
+      - name: Show Environment Variables Before
+        run: |
+          env | sort
+          env | sort > before.txt
+
       - name: Test Local Action
         id: test-action
         uses: ./
         with:
           dotEnvFilePath: ./__tests__/fixtures/test_values.env
+          maskValues: true
 
-      - name: Show Environment Variables
+      - name: Show Environment Variables After
         env:
           PASSWORD_10: ${{ env.PASSWORD_10 }}
           PASSWORD_11: ${{ env.PASSWORD_11 }}
+          PASSWORD_12: ${{ env.PASSWORD_12 }}
           PASSWORD_20: ${{ env.PASSWORD_20 }}
           PASSWORD_21: ${{ env.PASSWORD_21 }}
+          PASSWORD_22: ${{ env.PASSWORD_22 }}
         run: |
           env | sort
+          env | sort > after.txt
+          diff before.txt after.txt
           echo "---"
           echo $PASSWORD_10 | sed 's/./& /g'
           echo $PASSWORD_11 | sed 's/./& /g'
+          echo $PASSWORD_12 | sed 's/./& /g'
           echo $PASSWORD_20 | sed 's/./& /g'
           echo $PASSWORD_21 | sed 's/./& /g'
+          echo $PASSWORD_22 | sed 's/./& /g'
