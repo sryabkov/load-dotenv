@@ -1,6 +1,5 @@
 import * as core from '@actions/core'
-// import EnvObject from 'parse-dotenv'
-// import { getFileEntries } from './readFile'
+import { getFileEntries } from './readFile'
 
 /**
  * The main function for the action.
@@ -12,14 +11,12 @@ export async function run(): Promise<void> {
     const maskValues: boolean = core.getBooleanInput('maskValues')
 
     // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Processing file ${dotEnvFilePath} ...`)
+    core.debug(`dotEnvFilePath: ${dotEnvFilePath}`)
+    core.debug(`maskValues: ${maskValues}`)
 
-    console.log(`dotEnvFilePath: ${dotEnvFilePath}`)
-    console.log(`maskValues: ${maskValues}`)
+    const entries = await getFileEntries(dotEnvFilePath)
 
-    // const entries: <EnvObject> = getFileEntries(dotEnvFilePath)
-
-    // entries.forEach((entry: typeof EnvObject) => {
+    core.info(entries)
 
     // Consider setting output for other workflow steps to use
 
