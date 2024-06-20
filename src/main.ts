@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
 import { EnvObject } from './types'
 import { getFileEntries } from './readFile'
+import { exportVariables } from './exportVars'
 
 /**
  * The main function for the action.
@@ -17,11 +18,9 @@ export async function run(): Promise<void> {
 
     const entries: EnvObject = await getFileEntries(dotEnvFilePath)
 
+    exportVariables(entries, maskValues)
+
     core.info(JSON.stringify(entries))
-
-    // Consider setting output for other workflow steps to use
-
-    core.debug(`Finished processing file ${dotEnvFilePath} ...`)
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)

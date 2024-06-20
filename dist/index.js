@@ -24929,6 +24929,60 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ 8399:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.exportVariables = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+/**
+ * Export key value pair from the EnvObject as environment variables
+ * @param entries The content of the .env file as an EnvObject
+ * @returns {Promise<void>} Resolves with undefined.
+ */
+async function exportVariables(entries, maskValues) {
+    return new Promise(resolve => {
+        try {
+            core.info(JSON.stringify(entries));
+            core.info(String(maskValues));
+            resolve();
+        }
+        catch (error) {
+            if (error instanceof Error)
+                throw new Error(`Error setting environment variables: ${error.message}`);
+        }
+    });
+}
+exports.exportVariables = exportVariables;
+
+
+/***/ }),
+
 /***/ 399:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -24961,6 +25015,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const readFile_1 = __nccwpck_require__(8261);
+const exportVars_1 = __nccwpck_require__(8399);
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -24973,9 +25028,8 @@ async function run() {
         core.debug(`dotEnvFilePath: ${dotEnvFilePath}`);
         core.debug(`maskValues: ${maskValues}`);
         const entries = await (0, readFile_1.getFileEntries)(dotEnvFilePath);
+        (0, exportVars_1.exportVariables)(entries, maskValues);
         core.info(JSON.stringify(entries));
-        // Consider setting output for other workflow steps to use
-        core.debug(`Finished processing file ${dotEnvFilePath} ...`);
     }
     catch (error) {
         // Fail the workflow run if an error occurs
