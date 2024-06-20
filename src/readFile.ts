@@ -1,15 +1,15 @@
 import parseEnv from 'parse-dotenv'
+import { EnvObject } from './types'
 
 /**
  * Read .env file and parse into an array of key-value pairs.
  * @param filePath The full name of the .env file
- * @returns {Promise<any>} Resolves with the array of entries.
+ * @returns {Promise<EnvObject>} Resolves with the array of entries.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getFileEntries(filePath: string): Promise<any> {
+export async function getFileEntries(filePath: string): Promise<EnvObject> {
   return new Promise(resolve => {
     try {
-      const fileEntries = parseEnv(filePath)
+      const fileEntries: EnvObject = parseEnv(filePath)
       resolve(fileEntries)
     } catch (error) {
       if (error instanceof Error)

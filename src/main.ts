@@ -1,4 +1,5 @@
 import * as core from '@actions/core'
+import { EnvObject } from './types'
 import { getFileEntries } from './readFile'
 
 /**
@@ -14,9 +15,9 @@ export async function run(): Promise<void> {
     core.debug(`dotEnvFilePath: ${dotEnvFilePath}`)
     core.debug(`maskValues: ${maskValues}`)
 
-    const entries = await getFileEntries(dotEnvFilePath)
+    const entries: EnvObject = await getFileEntries(dotEnvFilePath)
 
-    core.info(entries)
+    core.info(JSON.stringify(entries))
 
     // Consider setting output for other workflow steps to use
 
