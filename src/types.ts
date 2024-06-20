@@ -1,5 +1,5 @@
 // redifines EnvObject from parse-dotenv (because it's not exported)
+// changes the type of key value from any to string
 export interface EnvObject {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any
+  [key: string]: string
 }
