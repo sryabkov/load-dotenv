@@ -55,32 +55,49 @@ jobs:
 
       - name: Show Environment Variables Before
         run: |
-          env | sort
-          env | sort > before.txt
+          env | sort | grep VALUE
+          env | sort | grep SECRET
 
-      - name: Test Local Action
-        id: test-action
+      - name: Test Local Action (Values, Not Masked)
+        id: test-action-values
         uses: ./
         with:
           dotEnvFilePath: ./__tests__/fixtures/test_values.env
+
+      - name: Test Local Action (Secrets, Masked)
+        id: test-action-secrets
+        uses: ./
+        with:
+          dotEnvFilePath: ./__tests__/fixtures/test_secrets.env
           maskValues: true
 
       - name: Show Environment Variables After
         env:
-          PASSWORD_10: ${{ env.PASSWORD_10 }}
-          PASSWORD_11: ${{ env.PASSWORD_11 }}
-          PASSWORD_12: ${{ env.PASSWORD_12 }}
-          PASSWORD_20: ${{ env.PASSWORD_20 }}
-          PASSWORD_21: ${{ env.PASSWORD_21 }}
-          PASSWORD_22: ${{ env.PASSWORD_22 }}
+          VALUE_10: ${{ env.VALUE_10 }}
+          VALUE_11: ${{ env.VALUE_11 }}
+          VALUE_12: ${{ env.VALUE_12 }}
+          VALUE_20: ${{ env.VALUE_20 }}
+          VALUE_21: ${{ env.VALUE_21 }}
+          VALUE_22: ${{ env.VALUE_22 }}
+          SECRET_10: ${{ env.SECRET_10 }}
+          SECRET_11: ${{ env.SECRET_11 }}
+          SECRET_12: ${{ env.SECRET_12 }}
+          SECRET_20: ${{ env.SECRET_20 }}
+          SECRET_21: ${{ env.SECRET_21 }}
+          SECRET_22: ${{ env.SECRET_22 }}
         run: |
-          env | sort
-          env | sort > after.txt
-          diff before.txt after.txt
+          env | sort | grep VALUE
+          env | sort | grep SECRET
           echo "---"
-          echo $PASSWORD_10 | sed 's/./& /g'
-          echo $PASSWORD_11 | sed 's/./& /g'
-          echo $PASSWORD_12 | sed 's/./& /g'
-          echo $PASSWORD_20 | sed 's/./& /g'
-          echo $PASSWORD_21 | sed 's/./& /g'
-          echo $PASSWORD_22 | sed 's/./& /g'
+          echo $VALUE_10
+          echo $VALUE_11
+          echo $VALUE_12
+          echo $VALUE_20
+          echo $VALUE_21
+          echo $VALUE_22
+          echo $SECRET_10 | sed 's/./& /g'
+          echo $SECRET_11 | sed 's/./& /g'
+          echo $SECRET_12 | sed 's/./& /g'
+          echo $SECRET_20 | sed 's/./& /g'
+          echo $SECRET_21 | sed 's/./& /g'
+          echo $SECRET_22 | sed 's/./& /g'
