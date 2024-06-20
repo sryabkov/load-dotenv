@@ -24974,8 +24974,6 @@ async function exportVariables(entries, maskValues) {
                 }
                 core.exportVariable(key, value);
             }
-            core.info(JSON.stringify(entries));
-            core.info(String(maskValues));
             resolve();
         }
         catch (error) {
@@ -25035,7 +25033,6 @@ async function run() {
         core.debug(`maskValues: ${maskValues}`);
         const entries = await (0, readFile_1.getFileEntries)(dotEnvFilePath);
         (0, exportVars_1.exportVariables)(entries, maskValues);
-        core.info(JSON.stringify(entries));
     }
     catch (error) {
         // Fail the workflow run if an error occurs
