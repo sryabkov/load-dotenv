@@ -57,7 +57,7 @@ jobs:
         id: show-env-vars-0
         shell: bash
         run: |
-          echo Nothing should be displayed here
+          echo 'Nothing should be displayed here'
           env | sort | grep VALUE || true
           env | sort | grep SECRET || true
 
@@ -71,7 +71,7 @@ jobs:
         id: show-env-vars-1
         shell: bash
         run: |
-          echo Should display VALUEs only, some with quotes
+          echo 'Should display VALUEs only, some with quotes'
           env | sort | grep VALUE
           env | sort | grep SECRET || true
 
@@ -86,7 +86,7 @@ jobs:
         id: show-env-vars-2
         shell: bash
         run: |
-          echo Should display VALUEs only (no quotes)
+          echo 'Should display VALUEs only (no quotes)'
           env | sort | grep VALUE
           env | sort | grep SECRET || true
 
@@ -97,7 +97,8 @@ jobs:
           filePath: ./__tests__/fixtures/test_secrets.env
           mask: true
 
-      - name: Show Environment Variables 4
+      - name: Show Environment Variables 3
+        id: show-env-vars-3
         shell: bash
         env:
           VALUE_10: ${{ env.VALUE_10 }}
@@ -113,7 +114,7 @@ jobs:
           SECRET_21: ${{ env.SECRET_21 }}
           SECRET_22: ${{ env.SECRET_22 }}
         run: |
-          echo Should display VALUEs (no quotes) and SECRETS (some quotes)
+          echo 'Should display VALUEs (no quotes) and SECRETS (some quotes)''
           env | sort | grep VALUE
           env | sort | grep SECRET
           echo "---"
@@ -145,6 +146,7 @@ jobs:
           removeQuotes: true
 
       - name: Show Environment Variables 4
+        id: show-env-vars-4
         shell: bash
         env:
           VALUE_10: ${{ env.VALUE_10 }}
@@ -160,7 +162,7 @@ jobs:
           SECRET_21: ${{ env.SECRET_21 }}
           SECRET_22: ${{ env.SECRET_22 }}
         run: |
-          echo Should display VALUEs (no quotes) and SECRETS (no quotes)
+          echo 'Should display VALUEs (no quotes) and SECRETS (no quotes)'
           env | sort | grep VALUE
           env | sort | grep SECRET
           echo "---"
