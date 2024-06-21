@@ -83,3 +83,5 @@ jobs:
       mask: true
 
 ```
+
+[koheing/set-masked-env]: https://github.com/koheing/set-masked-env
