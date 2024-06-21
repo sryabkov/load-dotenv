@@ -6,27 +6,35 @@
 [![CodeQL](https://github.com/actions/typescript-action/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/actions/typescript-action/actions/workflows/codeql-analysis.yml)
 [![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
 
-Use this GitHub Action to load key-value pairs from an `.env` file and export them as environment variables with optional masking.
+Use this GitHub Action to load key-value pairs from an `.env` file and export
+ them as environment variables with optional masking.
 
-This action was modeled after [koheing/set-masked-env], which wasn't parsing the `.env` files correctly in all cases. For example, at least as of June 2024, [koheing/set-masked-env] does not strip away comments.
+This action was modeled after [koheing/set-masked-env], which wasn't parsing
+ the `.env` files correctly in all cases. For example, at least as of June 2024,
+ [koheing/set-masked-env] does not strip away comments.
 
-This action relies on the [parse-dotenv](https://github.com/luqmanoop/parse-dotenv) package to parse `.env` files.
+This action relies on the [parse-dotenv](https://github.com/luqmanoop/
+ parse-dotenv) package to parse `.env` files.
 
-[actions/typescript-action](https://github.com/actions/typescript-action) was used as a template for the project.
+[actions/typescript-action](https://github.com/actions/typescript-action) was
+ used as a template for the project.
 
 ## Inputs
 
 ### `filePath` (required)
 
-A full name with path (relative to the root of the repo) from which to read the key-value pairs.
+A full name with path (relative to the root of the repo) from which to read the
+ key-value pairs.
 
 ### `mask` (optional)
 
-Mask the values of environment variables if the value is `true`. The default value is `false`.
+Mask the values of environment variables if the value is `true`. The default
+ value is `false`.
 
 ### `removeQuotes` (optional)
 
-If the value is wrapped in single or double quotes, setting `removeQuotes` to `true` will remove them. The default value is `false`.
+If the value is wrapped in single or double quotes, setting `removeQuotes` to
+ `true` will remove them. The default value is `false`.
 
 For example,
 
