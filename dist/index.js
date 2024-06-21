@@ -24963,16 +24963,24 @@ const core = __importStar(__nccwpck_require__(2186));
 /**
  * Export key value pair from the EnvObject as environment variables
  * @param entries The content of the .env file as an EnvObject
+ * @param mask A boolean flag indicating whether to mask the value
+ * @param removeQuotes A boolean flag indicating whether to remove quotes if the value is wrapped in them
  * @returns {Promise<void>} Resolves with undefined.
  */
-async function exportVariables(entries, mask) {
+async function exportVariables(entries, mask, removeQuotes) {
     return new Promise(resolve => {
         try {
             for (const [key, value] of Object.entries(entries)) {
-                if (mask) {
-                    core.setSecret(value);
+                let finalValue = value;
+                if (removeQuotes &&
+                    ((value.startsWith('"') && value.endsWith('"')) ||
+                        (value.startsWith("'") && value.endsWith("'")))) {
+                    finalValue = value.slice(1, -1);
                 }
-                core.exportVariable(key, value);
+                if (mask) {
+                    core.setSecret(finalValue);
+                }
+                core.exportVariable(key, finalValue);
             }
             resolve();
         }
@@ -25028,11 +25036,13 @@ async function run() {
     try {
         const filePath = core.getInput('filePath');
         const mask = core.getBooleanInput('mask');
+        const removeQuotes = core.getBooleanInput('removeQuotes');
         // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
         core.debug(`filePath: ${filePath}`);
         core.debug(`mask: ${mask}`);
+        core.debug(`mask: ${removeQuotes}`);
         const entries = await (0, readFile_1.getFileEntries)(filePath);
-        (0, exportVars_1.exportVariables)(entries, mask);
+        (0, exportVars_1.exportVariables)(entries, mask, removeQuotes);
     }
     catch (error) {
         // Fail the workflow run if an error occurs
