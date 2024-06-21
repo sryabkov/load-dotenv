@@ -114,7 +114,7 @@ jobs:
           SECRET_21: ${{ env.SECRET_21 }}
           SECRET_22: ${{ env.SECRET_22 }}
         run: |
-          echo 'Should display VALUEs (no quotes) and SECRETS (some quotes)''
+          echo 'Should display VALUEs (no quotes) and SECRETS (some quotes)'
           env | sort | grep VALUE
           env | sort | grep SECRET
           echo "---"
