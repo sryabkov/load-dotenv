@@ -4,19 +4,30 @@ import { EnvObject } from './types'
 /**
  * Export key value pair from the EnvObject as environment variables
  * @param entries The content of the .env file as an EnvObject
+ * @param mask A boolean flag indicating whether to mask the value
+ * @param removeQuotes A boolean flag indicating whether to remove quotes if the value is wrapped in them
  * @returns {Promise<void>} Resolves with undefined.
  */
 export async function exportVariables(
   entries: EnvObject,
-  mask: boolean
+  mask: boolean,
+  removeQuotes: boolean
 ): Promise<void> {
   return new Promise(resolve => {
     try {
       for (const [key, value] of Object.entries(entries)) {
-        if (mask) {
-          core.setSecret(value)
+        let finalValue = value
+        if (
+          removeQuotes &&
+          ((value.startsWith('"') && value.endsWith('"')) ||
+            (value.startsWith("'") && value.endsWith("'")))
+        ) {
+          finalValue = value.slice(1, -1)
         }
-        core.exportVariable(key, value)
+        if (mask) {
+          core.setSecret(finalValue)
+        }
+        core.exportVariable(key, finalValue)
       }
       resolve()
     } catch (error) {

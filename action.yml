@@ -18,6 +18,10 @@ inputs:
     description: 'Mask the values of environment variables'
     required: false
     default: 'false'
+  removeQuotes:
+    description: 'Strip single or double quotes if the value is wrapped in them'
+    required: false
+    default: 'false'
 
 runs:
   using: node20
