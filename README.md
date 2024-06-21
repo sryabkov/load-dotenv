@@ -13,8 +13,7 @@ This action was modeled after [koheing/set-masked-env], which wasn't parsing the
 `.env` files correctly in all cases. For example, at least as of June 2024,
 [koheing/set-masked-env] does not strip away comments.
 
-This action relies on the [parse-dotenv](https://github.com/luqmanoop/
-parse-dotenv) package to parse `.env` files.
+This action relies on the [parse-dotenv] package to parse `.env` files.
 
 [actions/typescript-action](https://github.com/actions/typescript-action) was
 used as a template for the project.
@@ -23,8 +22,8 @@ used as a template for the project.
 
 ### `filePath` (required)
 
-A full name with path (relative to the root of the repo) from which to read the
-key-value pairs.
+A full name with path (relative to the root of the repository) from which to
+read the key-value pairs.
 
 ### `mask` (optional)
 
@@ -92,3 +91,4 @@ jobs:
 ```
 
 [koheing/set-masked-env]: https://github.com/koheing/set-masked-env
+[parse-dotenv]: https://github.com/luqmanoop/parse-dotenv
