@@ -10,7 +10,7 @@ Use this GitHub Action to load key-value pairs from an `.env` file and export th
 
 This action was modeled after [koheing/set-masked-env], which wasn't parsing the `.env` files correctly in all cases. For example, at least as of June 2024, [koheing/set-masked-env] does not strip away comments.
 
-This action relies on the [parse-dotenv](https://github.com/luqmanoop/parse-dotenv) to parse `.env` files.
+This action relies on the [parse-dotenv](https://github.com/luqmanoop/parse-dotenv) package to parse `.env` files.
 
 [actions/typescript-action](https://github.com/actions/typescript-action) was used as a template for the project.
 
