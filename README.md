@@ -73,11 +73,11 @@ jobs:
     run: |
       sops -d ./.github/settings/cicd_config_secrets.env > ./.github/settings/cicd_config_secrets.dec.env
   - name: Load Settings
-    uses: sryabkov/load-dotenv@v0.2
+    uses: sryabkov/load-dotenv@v0
     with:
-      filePath: ./.github/settings/cicd_config_values.dec.env
+      filePath: ./.github/settings/cicd_config_values.env
   - name: Load Secrets
-    uses: sryabkov/load-dotenv@v0.2
+    uses: sryabkov/load-dotenv@v0
     with:
       filePath: ./.github/settings/cicd_config_secrets.dec.env
       mask: true
