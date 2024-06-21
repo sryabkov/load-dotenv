@@ -72,7 +72,7 @@ jobs:
         shell: bash
         run: |
           echo Should display VALUEs only, some with quotes
-          env | sort | grep VALUE || true
+          env | sort | grep VALUE
           env | sort | grep SECRET || true
 
       - name: Reload and Reexport Values (No masking, quote removal)
@@ -88,7 +88,7 @@ jobs:
         run: |
           echo Should display VALUEs only (no quotes)
           env | sort | grep VALUE
-          env | sort | grep SECRET
+          env | sort | grep SECRET || true
 
       - name: Load and Export Secrets (masking, no quote removal)
         id: load-and-export-secrets-no-quote-removal
