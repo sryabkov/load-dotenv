@@ -89,6 +89,8 @@ jobs:
           SECRET_21: ${{ env.SECRET_21 }}
           SECRET_22: ${{ env.SECRET_22 }}
         run: |
+          # shellcheck disable=SC2001
+
           env | sort | grep VALUE
           env | sort | grep SECRET
           echo "---"
