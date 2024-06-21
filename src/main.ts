@@ -16,7 +16,7 @@ export async function run(): Promise<void> {
     // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
     core.debug(`filePath: ${filePath}`)
     core.debug(`mask: ${mask}`)
-    core.debug(`mask: ${removeQuotes}`)
+    core.debug(`removeQuotes: ${removeQuotes}`)
 
     const entries: EnvObject = await getFileEntries(filePath)
     exportVariables(entries, mask, removeQuotes)
