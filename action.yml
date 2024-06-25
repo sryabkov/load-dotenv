@@ -1,6 +1,8 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'load-dotenv'
+description:
+  'Load key value pairs from a .env file and set them as environment variables
+  with optional masking'
+author: 'Sergei Ryabkov'
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
@@ -9,15 +11,17 @@ branding:
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  filePath:
+    description: 'Full path to the .env file'
     required: true
-    default: '1000'
-
-# Define your outputs here.
-outputs:
-  time:
-    description: 'Your output description here'
+  mask:
+    description: 'Mask the values of environment variables'
+    required: false
+    default: 'false'
+  removeQuotes:
+    description: 'Strip single or double quotes if the value is wrapped in them'
+    required: false
+    default: 'false'
 
 runs:
   using: node20

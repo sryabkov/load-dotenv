@@ -1,5 +1,7 @@
 import * as core from '@actions/core'
-import { wait } from './wait'
+import { EnvObject } from './types'
+import { getFileEntries } from './readFile'
+import { exportVariables } from './exportVars'
 
 /**
  * The main function for the action.
@@ -7,20 +9,23 @@ import { wait } from './wait'
  */
 export async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
+    const filePath: string = core.getInput('filePath')
+    const mask: boolean = core.getBooleanInput('mask')
+    const removeQuotes: boolean = core.getBooleanInput('removeQuotes')
 
     // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Waiting ${ms} milliseconds ...`)
+    core.debug(`filePath: ${filePath}`)
+    core.debug(`mask: ${mask}`)
+    core.debug(`removeQuotes: ${removeQuotes}`)
 
-    // Log the current timestamp, wait, then log the new timestamp
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
+    const entries: EnvObject = getFileEntries(filePath)
+    exportVariables(entries, mask, removeQuotes)
   } catch (error) {
     // Fail the workflow run if an error occurs
-    if (error instanceof Error) core.setFailed(error.message)
+    let message = 'Action failed.'
+    if (error instanceof Error) {
+      message = `${message} ${error.message}`
+    }
+    core.setFailed(message)
   }
 }

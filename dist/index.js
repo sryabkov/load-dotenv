@@ -1834,6 +1834,15 @@ function isLoopbackAddress(host) {
 
 /***/ }),
 
+/***/ 6884:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var r=__nccwpck_require__(1017),e=__nccwpck_require__(7147),t=r.resolve(process.cwd(),".env");module.exports=function(r,n){void 0===n&&(n={emptyLines:!1});try{var i=e.readFileSync(r||t,{encoding:"UTF-8"}),o={},c=0,s=0;return i.split("\n").map(function(r){return n.comments&&r.startsWith("#")?["__COMMENT_"+(s+=1)+"__",r]:r?r.split("=").map(function(r){return r.trim()}):n.emptyLines?["__EMPTYLINE_"+(c+=1)+"__",""]:[""]}).filter(function(r){return r.length>1}).forEach(function(r){o[r[0]]=r[1]}),o}catch(r){throw new Error(r)}};
+//# sourceMappingURL=parse-dotenv.js.map
+
+
+/***/ }),
+
 /***/ 4294:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -24920,6 +24929,73 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ 8399:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.exportVariables = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+/**
+ * Export key value pair from the EnvObject as environment variables
+ * @param entries The content of the .env file as an EnvObject
+ * @param mask A boolean flag indicating whether to mask the value
+ * @param removeQuotes A boolean flag indicating whether to remove quotes if the value is wrapped in them
+ * @returns {void}
+ */
+function exportVariables(entries, mask, removeQuotes) {
+    try {
+        for (const [key, value] of Object.entries(entries)) {
+            let finalValue = value;
+            if (removeQuotes &&
+                ((value.startsWith('"') && value.endsWith('"')) ||
+                    (value.startsWith("'") && value.endsWith("'")))) {
+                finalValue = value.slice(1, -1);
+            }
+            if (mask) {
+                core.setSecret(finalValue);
+            }
+            core.exportVariable(key, finalValue);
+        }
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            throw error;
+        }
+        else {
+            throw new Error(`Error exporting variables`);
+        }
+    }
+}
+exports.exportVariables = exportVariables;
+
+
+/***/ }),
+
 /***/ 399:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -24951,27 +25027,31 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-const wait_1 = __nccwpck_require__(5259);
+const readFile_1 = __nccwpck_require__(8261);
+const exportVars_1 = __nccwpck_require__(8399);
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 async function run() {
     try {
-        const ms = core.getInput('milliseconds');
+        const filePath = core.getInput('filePath');
+        const mask = core.getBooleanInput('mask');
+        const removeQuotes = core.getBooleanInput('removeQuotes');
         // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-        core.debug(`Waiting ${ms} milliseconds ...`);
-        // Log the current timestamp, wait, then log the new timestamp
-        core.debug(new Date().toTimeString());
-        await (0, wait_1.wait)(parseInt(ms, 10));
-        core.debug(new Date().toTimeString());
-        // Set outputs for other workflow steps to use
-        core.setOutput('time', new Date().toTimeString());
+        core.debug(`filePath: ${filePath}`);
+        core.debug(`mask: ${mask}`);
+        core.debug(`removeQuotes: ${removeQuotes}`);
+        const entries = (0, readFile_1.getFileEntries)(filePath);
+        (0, exportVars_1.exportVariables)(entries, mask, removeQuotes);
     }
     catch (error) {
         // Fail the workflow run if an error occurs
-        if (error instanceof Error)
-            core.setFailed(error.message);
+        let message = 'Action failed.';
+        if (error instanceof Error) {
+            message = `${message} ${error.message}`;
+        }
+        core.setFailed(message);
     }
 }
 exports.run = run;
@@ -24979,27 +25059,37 @@ exports.run = run;
 
 /***/ }),
 
-/***/ 5259:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 8261:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.wait = void 0;
+exports.getFileEntries = void 0;
+const parse_dotenv_1 = __importDefault(__nccwpck_require__(6884));
 /**
- * Wait for a number of milliseconds.
- * @param milliseconds The number of milliseconds to wait.
- * @returns {Promise<string>} Resolves with 'done!' after the wait is over.
+ * Read .env file and parse into an array of key-value pairs.
+ * @param filePath The full name of the .env file
+ * @returns { EnvObject | undefined } The array of settings or undefined
  */
-async function wait(milliseconds) {
-    return new Promise(resolve => {
-        if (isNaN(milliseconds)) {
-            throw new Error('milliseconds not a number');
+function getFileEntries(filePath) {
+    try {
+        const fileEntries = (0, parse_dotenv_1.default)(filePath);
+        return fileEntries;
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            throw error;
         }
-        setTimeout(() => resolve('done!'), milliseconds);
-    });
+        else {
+            throw new Error(`Error reading file ${filePath}.`);
+        }
+    }
 }
-exports.wait = wait;
+exports.getFileEntries = getFileEntries;
 
 
 /***/ }),

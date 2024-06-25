@@ -1,21 +1,23 @@
 {
-  "name": "typescript-action",
-  "description": "GitHub Actions TypeScript template",
-  "version": "0.0.0",
-  "author": "",
+  "name": "load-dotenv",
+  "description": "Load .env file",
+  "version": "0.2.0",
+  "author": "Sergei Ryabkov",
   "private": true,
-  "homepage": "https://github.com/actions/typescript-action",
+  "homepage": "https://github.com/sryabkov/load-dotenv",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/sryabkov/load-dotenv.git"
   },
   "bugs": {
-    "url": "https://github.com/actions/typescript-action/issues"
+    "url": "https://github.com/sryabkov/load-dotenv/issues"
   },
   "keywords": [
     "actions",
     "node",
-    "setup"
+    "load",
+    "dotenv",
+    "env"
   ],
   "exports": {
     ".": "./dist/index.js"
@@ -66,7 +68,8 @@
     ]
   },
   "dependencies": {
-    "@actions/core": "^1.10.1"
+    "@actions/core": "^1.10.1",
+    "parse-dotenv": "^2.1.0"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",

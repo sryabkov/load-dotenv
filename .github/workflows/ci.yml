@@ -53,12 +53,134 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
-      - name: Test Local Action
-        id: test-action
+      - name: Show Environment Variables 0
+        id: show-env-vars-0
+        shell: bash
+        run: |
+          echo 'Nothing should be displayed here'
+          env | sort | grep VALUE || true
+          env | sort | grep SECRET || true
+
+      - name: Load and Export Values (No masking, no quote removal)
+        id: load-and-export-values-no-quote-removal
         uses: ./
         with:
-          milliseconds: 2000
+          filePath: ./__tests__/fixtures/test_values.env
 
-      - name: Print Output
-        id: output
-        run: echo "${{ steps.test-action.outputs.time }}"
+      - name: Show Environment Variables 1
+        id: show-env-vars-1
+        shell: bash
+        run: |
+          echo 'Should display VALUEs only, some with quotes'
+          env | sort | grep VALUE
+          env | sort | grep SECRET || true
+
+      - name: Reload and Reexport Values (No masking, quote removal)
+        id: reload-and-reexport-values-quote-removal
+        uses: ./
+        with:
+          filePath: ./__tests__/fixtures/test_values.env
+          removeQuotes: true
+
+      - name: Show Environment Variables 2
+        id: show-env-vars-2
+        shell: bash
+        run: |
+          echo 'Should display VALUEs only (no quotes)'
+          env | sort | grep VALUE
+          env | sort | grep SECRET || true
+
+      - name: Load and Export Secrets (masking, no quote removal)
+        id: load-and-export-secrets-no-quote-removal
+        uses: ./
+        with:
+          filePath: ./__tests__/fixtures/test_secrets.env
+          mask: true
+
+      - name: Show Environment Variables 3
+        id: show-env-vars-3
+        shell: bash
+        env:
+          VALUE_10: ${{ env.VALUE_10 }}
+          VALUE_11: ${{ env.VALUE_11 }}
+          VALUE_12: ${{ env.VALUE_12 }}
+          VALUE_20: ${{ env.VALUE_20 }}
+          VALUE_21: ${{ env.VALUE_21 }}
+          VALUE_22: ${{ env.VALUE_22 }}
+          SECRET_10: ${{ env.SECRET_10 }}
+          SECRET_11: ${{ env.SECRET_11 }}
+          SECRET_12: ${{ env.SECRET_12 }}
+          SECRET_20: ${{ env.SECRET_20 }}
+          SECRET_21: ${{ env.SECRET_21 }}
+          SECRET_22: ${{ env.SECRET_22 }}
+        run: |
+          echo 'Should display VALUEs (no quotes) and SECRETS (some quotes)'
+          env | sort | grep VALUE
+          env | sort | grep SECRET
+          echo "---"
+          echo "$VALUE_10"
+          echo "$VALUE_11"
+          echo "$VALUE_12"
+          echo "$VALUE_20"
+          echo "$VALUE_21"
+          echo "$VALUE_22"
+          # shellcheck disable=SC2001
+          echo "$SECRET_10" | sed 's/./& /g'
+          # shellcheck disable=SC2001
+          echo "$SECRET_11" | sed 's/./& /g'
+          # shellcheck disable=SC2001
+          echo "$SECRET_12" | sed 's/./& /g'
+          # shellcheck disable=SC2001
+          echo "$SECRET_20" | sed 's/./& /g'
+          # shellcheck disable=SC2001
+          echo "$SECRET_21" | sed 's/./& /g'
+          # shellcheck disable=SC2001
+          echo "$SECRET_22" | sed 's/./& /g'
+
+      - name: Reload and Reexport Secrets (masking, quote removal)
+        id: reload-and-reexport-secrets-quote-removal
+        uses: ./
+        with:
+          filePath: ./__tests__/fixtures/test_secrets.env
+          mask: true
+          removeQuotes: true
+
+      - name: Show Environment Variables 4
+        id: show-env-vars-4
+        shell: bash
+        env:
+          VALUE_10: ${{ env.VALUE_10 }}
+          VALUE_11: ${{ env.VALUE_11 }}
+          VALUE_12: ${{ env.VALUE_12 }}
+          VALUE_20: ${{ env.VALUE_20 }}
+          VALUE_21: ${{ env.VALUE_21 }}
+          VALUE_22: ${{ env.VALUE_22 }}
+          SECRET_10: ${{ env.SECRET_10 }}
+          SECRET_11: ${{ env.SECRET_11 }}
+          SECRET_12: ${{ env.SECRET_12 }}
+          SECRET_20: ${{ env.SECRET_20 }}
+          SECRET_21: ${{ env.SECRET_21 }}
+          SECRET_22: ${{ env.SECRET_22 }}
+        run: |
+          echo 'Should display VALUEs (no quotes) and SECRETS (no quotes)'
+          env | sort | grep VALUE
+          env | sort | grep SECRET
+          echo "---"
+          echo "$VALUE_10"
+          echo "$VALUE_11"
+          echo "$VALUE_12"
+          echo "$VALUE_20"
+          echo "$VALUE_21"
+          echo "$VALUE_22"
+          # shellcheck disable=SC2001
+          echo "$SECRET_10" | sed 's/./& /g'
+          # shellcheck disable=SC2001
+          echo "$SECRET_11" | sed 's/./& /g'
+          # shellcheck disable=SC2001
+          echo "$SECRET_12" | sed 's/./& /g'
+          # shellcheck disable=SC2001
+          echo "$SECRET_20" | sed 's/./& /g'
+          # shellcheck disable=SC2001
+          echo "$SECRET_21" | sed 's/./& /g'
+          # shellcheck disable=SC2001
+          echo "$SECRET_22" | sed 's/./& /g'
