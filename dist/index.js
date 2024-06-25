@@ -24958,7 +24958,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.exportVariables = void 0;
+exports.exportVariables = exportVariables;
 const core = __importStar(__nccwpck_require__(2186));
 /**
  * Export key value pair from the EnvObject as environment variables
@@ -24991,7 +24991,6 @@ function exportVariables(entries, mask, removeQuotes) {
         }
     }
 }
-exports.exportVariables = exportVariables;
 
 
 /***/ }),
@@ -25025,7 +25024,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.run = void 0;
+exports.run = run;
 const core = __importStar(__nccwpck_require__(2186));
 const readFile_1 = __nccwpck_require__(8261);
 const exportVars_1 = __nccwpck_require__(8399);
@@ -25054,7 +25053,6 @@ async function run() {
         core.setFailed(message);
     }
 }
-exports.run = run;
 
 
 /***/ }),
@@ -25068,7 +25066,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getFileEntries = void 0;
+exports.getFileEntries = getFileEntries;
 const parse_dotenv_1 = __importDefault(__nccwpck_require__(6884));
 /**
  * Read .env file and parse into an array of key-value pairs.
@@ -25089,7 +25087,6 @@ function getFileEntries(filePath) {
         }
     }
 }
-exports.getFileEntries = getFileEntries;
 
 
 /***/ }),
