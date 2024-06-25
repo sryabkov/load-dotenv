@@ -24965,30 +24965,31 @@ const core = __importStar(__nccwpck_require__(2186));
  * @param entries The content of the .env file as an EnvObject
  * @param mask A boolean flag indicating whether to mask the value
  * @param removeQuotes A boolean flag indicating whether to remove quotes if the value is wrapped in them
- * @returns {Promise<void>} Resolves with undefined.
+ * @returns {void}
  */
-async function exportVariables(entries, mask, removeQuotes) {
-    return new Promise(resolve => {
-        try {
-            for (const [key, value] of Object.entries(entries)) {
-                let finalValue = value;
-                if (removeQuotes &&
-                    ((value.startsWith('"') && value.endsWith('"')) ||
-                        (value.startsWith("'") && value.endsWith("'")))) {
-                    finalValue = value.slice(1, -1);
-                }
-                if (mask) {
-                    core.setSecret(finalValue);
-                }
-                core.exportVariable(key, finalValue);
+function exportVariables(entries, mask, removeQuotes) {
+    try {
+        for (const [key, value] of Object.entries(entries)) {
+            let finalValue = value;
+            if (removeQuotes &&
+                ((value.startsWith('"') && value.endsWith('"')) ||
+                    (value.startsWith("'") && value.endsWith("'")))) {
+                finalValue = value.slice(1, -1);
             }
-            resolve();
+            if (mask) {
+                core.setSecret(finalValue);
+            }
+            core.exportVariable(key, finalValue);
         }
-        catch (error) {
-            if (error instanceof Error)
-                throw new Error(`Error setting environment variables: ${error.message}`);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            throw error;
         }
-    });
+        else {
+            throw new Error(`Error exporting variables`);
+        }
+    }
 }
 exports.exportVariables = exportVariables;
 
@@ -25040,14 +25041,17 @@ async function run() {
         // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
         core.debug(`filePath: ${filePath}`);
         core.debug(`mask: ${mask}`);
-        core.debug(`mask: ${removeQuotes}`);
-        const entries = await (0, readFile_1.getFileEntries)(filePath);
+        core.debug(`removeQuotes: ${removeQuotes}`);
+        const entries = (0, readFile_1.getFileEntries)(filePath);
         (0, exportVars_1.exportVariables)(entries, mask, removeQuotes);
     }
     catch (error) {
         // Fail the workflow run if an error occurs
-        if (error instanceof Error)
-            core.setFailed(error.message);
+        let message = 'Action failed.';
+        if (error instanceof Error) {
+            message = `${message} ${error.message}`;
+        }
+        core.setFailed(message);
     }
 }
 exports.run = run;
@@ -25069,19 +25073,21 @@ const parse_dotenv_1 = __importDefault(__nccwpck_require__(6884));
 /**
  * Read .env file and parse into an array of key-value pairs.
  * @param filePath The full name of the .env file
- * @returns {Promise<EnvObject>} Resolves with the array of entries.
+ * @returns { EnvObject | undefined } The array of settings or undefined
  */
-async function getFileEntries(filePath) {
-    return new Promise(resolve => {
-        try {
-            const fileEntries = (0, parse_dotenv_1.default)(filePath);
-            resolve(fileEntries);
+function getFileEntries(filePath) {
+    try {
+        const fileEntries = (0, parse_dotenv_1.default)(filePath);
+        return fileEntries;
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            throw error;
         }
-        catch (error) {
-            if (error instanceof Error)
-                throw new Error(`Error parsing file ${filePath}: ${error.message}`);
+        else {
+            throw new Error(`Error reading file ${filePath}.`);
         }
-    });
+    }
 }
 exports.getFileEntries = getFileEntries;
 
