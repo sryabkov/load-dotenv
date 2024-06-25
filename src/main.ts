@@ -18,10 +18,14 @@ export async function run(): Promise<void> {
     core.debug(`mask: ${mask}`)
     core.debug(`removeQuotes: ${removeQuotes}`)
 
-    const entries: EnvObject = await getFileEntries(filePath)
+    const entries: EnvObject = getFileEntries(filePath)
     exportVariables(entries, mask, removeQuotes)
   } catch (error) {
     // Fail the workflow run if an error occurs
-    if (error instanceof Error) core.setFailed(error.message)
+    let message = 'Action failed.'
+    if (error instanceof Error) {
+      message = `${message} ${error.message}`
+    }
+    core.setFailed(message)
   }
 }

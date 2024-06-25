@@ -4,16 +4,17 @@ import { EnvObject } from './types'
 /**
  * Read .env file and parse into an array of key-value pairs.
  * @param filePath The full name of the .env file
- * @returns {Promise<EnvObject>} Resolves with the array of entries.
+ * @returns { EnvObject | undefined } The array of settings or undefined
  */
-export async function getFileEntries(filePath: string): Promise<EnvObject> {
-  return new Promise(resolve => {
-    try {
-      const fileEntries: EnvObject = parseEnv(filePath)
-      resolve(fileEntries)
-    } catch (error) {
-      if (error instanceof Error)
-        throw new Error(`Error parsing file ${filePath}: ${error.message}`)
+export function getFileEntries(filePath: string): EnvObject {
+  try {
+    const fileEntries = parseEnv(filePath)
+    return fileEntries
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error
+    } else {
+      throw new Error(`Error reading file ${filePath}.`)
     }
-  })
+  }
 }

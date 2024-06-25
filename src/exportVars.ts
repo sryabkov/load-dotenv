@@ -6,33 +6,33 @@ import { EnvObject } from './types'
  * @param entries The content of the .env file as an EnvObject
  * @param mask A boolean flag indicating whether to mask the value
  * @param removeQuotes A boolean flag indicating whether to remove quotes if the value is wrapped in them
- * @returns {Promise<void>} Resolves with undefined.
+ * @returns {void}
  */
-export async function exportVariables(
+export function exportVariables(
   entries: EnvObject,
   mask: boolean,
   removeQuotes: boolean
-): Promise<void> {
-  return new Promise(resolve => {
-    try {
-      for (const [key, value] of Object.entries(entries)) {
-        let finalValue = value
-        if (
-          removeQuotes &&
-          ((value.startsWith('"') && value.endsWith('"')) ||
-            (value.startsWith("'") && value.endsWith("'")))
-        ) {
-          finalValue = value.slice(1, -1)
-        }
-        if (mask) {
-          core.setSecret(finalValue)
-        }
-        core.exportVariable(key, finalValue)
+): void {
+  try {
+    for (const [key, value] of Object.entries(entries)) {
+      let finalValue = value
+      if (
+        removeQuotes &&
+        ((value.startsWith('"') && value.endsWith('"')) ||
+          (value.startsWith("'") && value.endsWith("'")))
+      ) {
+        finalValue = value.slice(1, -1)
       }
-      resolve()
-    } catch (error) {
-      if (error instanceof Error)
-        throw new Error(`Error setting environment variables: ${error.message}`)
+      if (mask) {
+        core.setSecret(finalValue)
+      }
+      core.exportVariable(key, finalValue)
     }
-  })
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error
+    } else {
+      throw new Error(`Error exporting variables`)
+    }
+  }
 }
